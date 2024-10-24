@@ -11,4 +11,3 @@ async def send_random_name(message: types.Message):
     random_name = random.choice(names_list)
     await message.reply(f"Список имен: {names_list}\n"
                         f"Случайное имя: {random_name}")
-
