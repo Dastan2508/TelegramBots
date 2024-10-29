@@ -22,8 +22,12 @@ async def stop_opros_handler(message: types.Message, state: FSMContext):
 
 @opros_router.message(Command('opros'))  # Запуск опроса по команде /opros
 async def start_opros_handler(message: types.Message, state: FSMContext):
-    await state.set_state(Opros.name)
-    await message.answer("Как Вас зовут?")
+    id = callback.from_user.id
+    user_ids = database.fetch("SELECT user_id FROM users_id")
+
+    if any(user_id["user_id"] == id for user_id in user_ids):
+        await callback.message.answer("Вы уже проходили опрос!")
+        return
 
 @opros_router.message(Opros.name)
 async def process_name(message: types.Message, state: FSMContext):

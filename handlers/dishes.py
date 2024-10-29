@@ -31,11 +31,13 @@ categoris = ("Супы", "Вторые", "Горячие напитки", "Хо�
 
 @catalog_router.message(F.text.in_(categoris))
 async def show_dishes_by_category(message: types.Message):
-    categori = message.text
-    print(categori)
-    dishes = database.fetch("SELECT * FROM dishes")
-    print(dishes)
-    await message.answer("Все наши блюда\n")
-    for i in dishes:
-        msg = f"Название: {i['name_of_Food']}\nЦена: {i['price']}"
-        await message.answer(msg)
+    category = message.text
+    print(category)
+    dishes = database.fetch("SELECT * FROM dishes WHERE category = ?", (category,))
+    if dishes:
+        await message.answer("Вот все блюда в категории " + category + ":\n")
+        for dish in dishes:
+            msg = f"Название: {dish['name_of_Food']}\nЦена: {dish['price']} руб."
+            await message.answer(msg)
+    else:
+        await message.answer(f"В категории '{category}' пока нет блюд.")
