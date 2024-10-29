@@ -20,7 +20,7 @@ async def stop_opros_handler(message: types.Message, state: FSMContext):
     await state.clear()
     await message.answer("Опрос остановлен!")
 
-@opros_router.message(Command('opros'))  # Запуск опроса по команде /opros
+@opros_router.message(F.data == 'opros')  # Запуск опроса по команде /opros
 async def start_opros_handler(message: types.Message, state: FSMContext):
     id = callback.from_user.id
     user_ids = database.fetch("SELECT user_id FROM users_id")
